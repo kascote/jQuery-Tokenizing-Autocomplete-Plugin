@@ -40,7 +40,7 @@ $.fn.tokenInput = function (url, options) {
         selectedDropdownItem: "token-input-selected-dropdown-item",
         inputToken: "token-input-input-token"
     }, options.classes);
-    
+
     return this.each(function () {
         var list = new $.TokenList(this, settings);
     });
@@ -73,7 +73,7 @@ $.TokenList = function (input, settings) {
 
     // Save the tokens
     var saved_tokens = [];
-    
+
     // Keep track of the number of tokens in the list
     var token_count = 0;
 
@@ -96,7 +96,7 @@ $.TokenList = function (input, settings) {
         .blur(function () {
         	// If the user has been typing, create what they typed as a new value
         	if(settings.allowNewValues) create_new_token();
-        	
+
             hide_dropdown();
         })
         .keydown(function (event) {
@@ -293,7 +293,7 @@ $.TokenList = function (input, settings) {
         } else if(settings.prePopulateFromInput) {
         	var values = hidden_input.val().split(',');
         	hidden_input.val('');
-        	
+
         	$.each(values, function() {
         		var value = $.trim(this);
         		if(value.length > 0) add_token(value, value);
@@ -364,15 +364,15 @@ $.TokenList = function (input, settings) {
         // Save this token id
         var id_string = id + ","
         hidden_input.val(hidden_input.val() + id_string);
-        
+
         token_count++;
-        
+
         if(settings.tokenLimit != null && settings.tokenLimit >= token_count) {
             input_box.hide();
             hide_dropdown();
         }
     }
-    
+
     function create_new_token () {
     	var string = input_box.val().toLowerCase();
     	if(string.length > 0) add_token(string, string);
@@ -441,9 +441,9 @@ $.TokenList = function (input, settings) {
         } else {
             hidden_input.val(str.slice(0, start) + str.slice(end, str.length));
         }
-        
+
         token_count--;
-        
+
         if (settings.tokenLimit != null) {
             input_box
                 .show()
@@ -485,6 +485,11 @@ $.TokenList = function (input, settings) {
                 .appendTo(dropdown)
                 .mouseover(function (event) {
                     select_dropdown_item(get_element_from_event(event, "li"));
+                })
+                .click(function (event) {
+                    var item = get_element_from_event(event, "li");
+                    var the_data = $.data(item.get(0), "tokeninput");
+                    add_token(the_data.id, the_data.name);
                 })
                 .mousedown(function (event) {
                     add_token(get_element_from_event(event, "li"));
@@ -580,7 +585,7 @@ $.TokenList = function (input, settings) {
               cache.add(query, settings.jsonContainer ? results[settings.jsonContainer] : results);
               populate_dropdown(query, settings.jsonContainer ? results[settings.jsonContainer] : results);
             };
-            
+
             if(settings.method == "POST") {
 			    $.post(settings.url, settings.queryParam + "=" + query, callback, settings.contentType);
 		    } else {
