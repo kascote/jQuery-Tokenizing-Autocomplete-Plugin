@@ -212,7 +212,6 @@ $.TokenList = function (input, settings) {
 
     // The list to store the token items in
     var token_list = $("<ul />")
-        .css('width', hidden_input.width())
         .addClass(settings.classes.tokenList)
         .insertAfter(hidden_input)
         .click(function (event) {
@@ -291,7 +290,7 @@ $.TokenList = function (input, settings) {
     function init_list () {
         if(settings.prePopulate) {
             $.each(settings.prePopulate, function(i, item) {
-                insert_token(item.id, item.name);
+                create_token(item);
             });
         }
     }
